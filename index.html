@@ -279,7 +279,7 @@ button{font:inherit; cursor:pointer}
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .num__l{margin-top:10px; font-size:14px; color:rgba(255,255,255,.72); font-weight:600}
-.prints{display:grid; gap:18px; margin-top:26px}
+.prints{display:grid; gap:18px; margin-top:44px}
 @media(min-width:760px){.prints{grid-template-columns:repeat(2,1fr); max-width:720px; margin-inline:auto}}
 .print{
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
@@ -337,7 +337,14 @@ button{font:inherit; cursor:pointer}
   margin:auto 0 0; font-size:14px; line-height:1.6; color:rgba(255,255,255,.78);
   font-style:italic; padding-left:14px; border-left:2px solid rgba(255,112,0,.65);
 }
-.case__periodo{margin-top:16px; font-size:11.5px; color:rgba(255,255,255,.42); letter-spacing:.04em}
+.case__periodo{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin:0 0 18px; padding:11px 14px; border-radius:12px;
+  background:rgba(255,112,0,.16); border:1px solid rgba(255,154,61,.42);
+  font-family:'Sora'; font-weight:800; font-size:12.5px; letter-spacing:.08em;
+  text-transform:uppercase; color:#FFC28F; text-align:center;
+}
+.case__periodo svg{width:15px;height:15px;flex:none;stroke:#FFB067;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .case__ig{
   display:flex; align-items:center; gap:10px; margin:0 0 18px;
   background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.1);
@@ -748,11 +755,6 @@ button{font:inherit; cursor:pointer}
       <h2 class="h2">RESULTADOS FALAM MAIS ALTO.</h2>
     </div>
 
-    <div class="numeros">
-      <div class="num rv"><div class="num__v">R$ 101.600</div><div class="num__l">Venda acumulada no mês</div></div>
-      <div class="num rv"><div class="num__v">R$ 121.800</div><div class="num__l">Venda acumulada no mês</div></div>
-      <div class="num rv"><div class="num__v">R$ 32.000</div><div class="num__l">Em vendas em um único dia</div></div>
-    </div>
 
     <!-- Prints reais das conversas com clientes -->
     <div class="prints">
@@ -783,9 +785,10 @@ button{font:inherit; cursor:pointer}
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
           <div><span class="ig__h">@mercatosadia</span><span class="ig__s">227 posts · 30 mil seguidores</span></div>
         </div>
+        <div class="case__periodo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>Resultado em apenas 3 meses</div>
         <div class="case__fat">
-          <b>R$ 348 mil</b>
-          <span>Em faturamento</span>
+          <b>+ de R$ 300 mil</b>
+          <span>Em faturamento no e-commerce</span>
         </div>
         <div class="case__stats">
           <div><b>R$ 78.022</b><span>Investimento em tráfego</span></div>
@@ -793,7 +796,6 @@ button{font:inherit; cursor:pointer}
           <div><b>920</b><span>Pedidos realizados</span></div>
           <div><b>+5.000</b><span>Novos seguidores</span></div>
         </div>
-        <p class="case__periodo">Período analisado: 3 meses</p>
       </article>
 
       <article class="case rv">
@@ -804,8 +806,9 @@ button{font:inherit; cursor:pointer}
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
           <div><span class="ig__h">@clinica.maissorrisos</span><span class="ig__s">264 posts · 4.727 seguidores</span></div>
         </div>
+        <div class="case__periodo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>Resultado em apenas 3 meses</div>
         <div class="case__fat">
-          <b>R$ 383 mil</b>
+          <b>+ de R$ 300 mil</b>
           <span>Em faturamento</span>
         </div>
         <div class="case__stats">
@@ -814,7 +817,6 @@ button{font:inherit; cursor:pointer}
           <div><b>65</b><span>Fechamentos (30 tráfego · 35 indicação)</span></div>
           <div><b>+550</b><span>Novos seguidores</span></div>
         </div>
-        <p class="case__periodo">Período analisado: 3 meses</p>
       </article>
 
       <article class="case rv">
@@ -825,8 +827,9 @@ button{font:inherit; cursor:pointer}
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
           <div><span class="ig__h">@infinitefio.conquista</span><span class="ig__s">255 posts · 6.713 seguidores</span></div>
         </div>
+        <div class="case__periodo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/></svg>Resultado em apenas 3 meses</div>
         <div class="case__fat">
-          <b>R$ 718 mil</b>
+          <b>+ de R$ 700 mil</b>
           <span>Em faturamento</span>
         </div>
         <div class="case__stats">
@@ -835,7 +838,6 @@ button{font:inherit; cursor:pointer}
           <div><b>91</b><span>Fechamentos (52 tráfego · 19 indicação)</span></div>
           <div><b>+1.271</b><span>Novos seguidores</span></div>
         </div>
-        <p class="case__periodo">Período analisado: 3 meses</p>
       </article>
 
     </div>
