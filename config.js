@@ -24,7 +24,7 @@ window.N7_CONFIG = {
 
   // Enviar também para o WhatsApp caso o webhook não esteja configurado (fallback)
   WHATSAPP_FALLBACK: true,
-  WHATSAPP_NUMERO: "5511999999999", // DDI+DDD+número, somente dígitos
+  WHATSAPP_NUMERO: "5577981223827", // Comercial Núcleo7 — (77) 98122-3827
 
   /* ---------- PÁGINAS ---------- */
   PAGINA_OBRIGADO: "obrigado.html",
@@ -34,5 +34,5 @@ window.N7_CONFIG = {
 
   /* ---------- MODO DEBUG ---------- */
   // true = imprime no console todos os eventos e o payload do lead
-  DEBUG: true
+  DEBUG: false
 };
