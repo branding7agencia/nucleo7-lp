@@ -300,19 +300,31 @@ button{font:inherit; cursor:pointer}
     radial-gradient(circle at 86% 86%, rgba(0,0,0,.045) 0 2px, transparent 3px);
 }
 .zap__b{
-  position:relative; background:#fff; border-radius:9px; padding:11px 13px 7px;
+  position:relative; background:#fff; border-radius:9px; padding:9px 12px 8px;
   box-shadow:0 1px 1.5px rgba(0,0,0,.16); margin-left:8px;
   font-family:'Inter',system-ui,sans-serif; color:#111B21;
   font-size:14.5px; line-height:1.5; text-align:left;
 }
-.zap__b::after{
+.zap__b + .zap__b{margin-top:9px}
+.zap__b:first-of-type::after{
   content:''; position:absolute; top:0; left:-8px; width:9px; height:14px;
   background:#fff; clip-path:polygon(100% 0,100% 100%,0 0);
 }
-.zap__de{font-weight:700; font-size:13.5px; color:#B4643C; margin-bottom:7px}
-.zap__t{margin:0; white-space:pre-line; font-variant-numeric:tabular-nums}
+.zap__de{font-weight:700; font-size:13.5px; color:#B4643C; margin-bottom:6px}
+.zap__t{margin:0; white-space:pre-line; font-variant-numeric:tabular-nums; overflow:hidden}
 .zap__t b{font-weight:700}
-.zap__h{display:block; text-align:right; font-size:11px; color:#667781; margin-top:5px}
+.zap__h{float:right; margin:6px 0 0 12px; font-size:11px; color:#667781; white-space:nowrap}
+.zap__q{
+  background:#F0F0F0; border-left:4px solid #B4643C; border-radius:6px;
+  padding:7px 10px; margin-bottom:7px;
+}
+.zap__q b{display:block; color:#B4643C; font-size:13px; margin-bottom:2px}
+.zap__q span{font-size:13.5px; color:#3B4A54}
+.zap__re{
+  display:inline-block; margin:-8px 0 0 16px; position:relative; z-index:2;
+  background:#fff; border-radius:999px; padding:3px 8px; font-size:13px;
+  box-shadow:0 1px 1.5px rgba(0,0,0,.16);
+}
 .print__ph{
   aspect-ratio:9/13; border-radius:10px; display:grid; place-items:center; text-align:center;
   background:repeating-linear-gradient(45deg,rgba(255,255,255,.045) 0 12px,rgba(255,255,255,.02) 12px 24px);
@@ -790,8 +802,7 @@ button{font:inherit; cursor:pointer}
           <div class="zap__b">
             <p class="zap__t">Resgate efetivado do dia: 00
 Venda efetivada nova no dia : 00
-<b>Venda do mês : 101.600,00</b></p>
-            <span class="zap__h">09:14</span>
+<b>Venda do mês : 101.600,00</b><span class="zap__h">09:14</span></p>
           </div>
         </div>
         <figcaption class="print__cap">Relatório enviado pelo cliente — R$ 101.600 no mês</figcaption>
@@ -805,11 +816,32 @@ Venda efetivada nova no dia : 00
 Terapia: 3 (1 PASSANTE 1 INDICAÇÃO)
 Transplante: 7 (1 INDICAÇÃO)
 <b>Venda do dia : 32.000,00</b>
-<b>Venda do mês : 121.800,00</b></p>
-            <span class="zap__h">18:27</span>
+<b>Venda do mês : 121.800,00</b><span class="zap__h">18:27</span></p>
           </div>
         </div>
         <figcaption class="print__cap">Relatório enviado pelo cliente — R$ 32.000 no dia · R$ 121.800 no mês</figcaption>
+      </figure>
+      <figure class="print rv" style="margin:0">
+        <div class="zap">
+          <div class="zap__b">
+            <div class="zap__de">Dr. Fabricio</div>
+            <div class="zap__q"><b>Dr. Fabricio</b><span>Vai operar daqui 2 semanas</span></div>
+            <p class="zap__t"><b>Valor líquido fechado ! 5,6 K</b><span class="zap__h">13:06</span></p>
+          </div>
+          <div class="zap__re">🚀</div>
+        </div>
+        <figcaption class="print__cap">Paciente fechado — R$ 5,6 mil líquidos em um único atendimento</figcaption>
+      </figure>
+      <figure class="print rv" style="margin:0">
+        <div class="zap">
+          <div class="zap__b"><p class="zap__t">Vamos que vamos que tem mais o que fazer<span class="zap__h">13:18</span></p></div>
+          <div class="zap__b"><p class="zap__t">Eu sou muito fã de vcs ...<span class="zap__h">13:18</span></p></div>
+          <div class="zap__re">❤️</div>
+          <div class="zap__b"><p class="zap__t">Nada para ajustar<span class="zap__h">13:19</span></p></div>
+          <div class="zap__b"><p class="zap__t">É só colocar nas redes<span class="zap__h">13:19</span></p></div>
+          <div class="zap__b"><p class="zap__t">Tem alguma estratégia?!<span class="zap__h">13:19</span></p></div>
+        </div>
+        <figcaption class="print__cap">Aprovação de criativos — cliente sem nenhum ajuste a pedir</figcaption>
       </figure>
     </div>
 
