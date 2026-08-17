@@ -20,11 +20,11 @@
 <meta property="og:title" content="Tráfego pago para sua empresa. Você só paga depois da primeira venda.">
 <meta property="og:description" content="Uma empresa será selecionada para receber uma operação estratégica de tráfego pago e suporte comercial da Núcleo7.">
 <meta property="og:url" content="https://nucleosete.com.br/">
-<meta property="og:image" content="https://nucleosete.com.br/assets/og-image.png">
+<meta property="og:image" content="https://nucleosete.com.br/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nucleosete.com.br/assets/og-image.png">
+<meta name="twitter:image" content="https://nucleosete.com.br/assets/og-image.jpg">
 
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -32,7 +32,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;600;700&display=swap"></noscript>
 
 <style>
 /* ============================================================
@@ -212,7 +214,7 @@ button{font:inherit; cursor:pointer}
   background:var(--grad); color:#fff; text-align:center; padding:16px var(--pad);
   font-family:'Sora'; font-weight:700; font-size:clamp(13px,2.1vw,15.5px); letter-spacing:.01em;
 }
-.faixa span{opacity:.82; font-weight:500}
+.faixa span{opacity:.82; font-weight:600}
 
 /* ---------- Cards genéricos ---------- */
 .grid{display:grid; gap:18px}
@@ -274,7 +276,7 @@ button{font:inherit; cursor:pointer}
   background:linear-gradient(135deg,#fff 0%,#FFB067 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
-.num__l{margin-top:10px; font-size:14px; color:rgba(255,255,255,.72); font-weight:500}
+.num__l{margin-top:10px; font-size:14px; color:rgba(255,255,255,.72); font-weight:600}
 .prints{display:grid; gap:18px; margin-top:26px}
 @media(min-width:760px){.prints{grid-template-columns:repeat(3,1fr)}}
 .print{
@@ -321,7 +323,7 @@ button{font:inherit; cursor:pointer}
 .criterios li{
   display:flex; align-items:flex-start; gap:14px;
   background:var(--superficie); border:1px solid var(--linha); border-radius:var(--r);
-  padding:18px 20px; font-size:15.5px; font-weight:500; color:var(--tinta);
+  padding:18px 20px; font-size:15.5px; font-weight:600; color:var(--tinta);
 }
 .check{
   flex:none; width:24px; height:24px; border-radius:50%; background:var(--grad-cta);
@@ -535,6 +537,22 @@ button{font:inherit; cursor:pointer}
 .rodape a{text-decoration:none}
 .rodape a:hover{color:#fff}
 
+
+/* ---------- Ergonomia de toque no mobile ---------- */
+@media(max-width:768px){
+  .logo{padding:6px 0}
+  .fc__links a{padding:13px 18px; min-height:44px; display:inline-flex; align-items:center}
+  .fc__todos{min-height:44px; display:inline-flex; align-items:center}
+  .rodape a{display:inline-block; padding:8px 0; min-height:40px; line-height:24px}
+  .q summary{padding:22px 20px; min-height:52px}
+}
+
+@media(max-width:400px){
+  .top__in{gap:8px}
+  .logo img{height:26px}
+  .barra .btn{font-size:14px; padding:15px 18px}
+}
+
 @media(prefers-reduced-motion:reduce){
   .rv{opacity:1; transform:none; transition:none}
   html{scroll-behavior:auto}
@@ -550,7 +568,7 @@ button{font:inherit; cursor:pointer}
 <header class="top">
   <div class="wrap top__in">
     <a class="logo" href="#topo" aria-label="Núcleo7">
-      <img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7 — Propulsora Comercial &amp; Digital" width="1369" height="324">
+      <img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7 — Propulsora Comercial &amp; Digital" width="1369" height="324" fetchpriority="high" decoding="async">
     </a>
     <a class="top__cta" href="#formulario" data-cta="header">CADASTRE SUA EMPRESA AQUI!</a>
   </div>
@@ -1075,7 +1093,7 @@ button{font:inherit; cursor:pointer}
 <!-- ===================== RODAPÉ ===================== -->
 <footer class="rodape">
   <div class="wrap rodape__in">
-    <a class="logo" href="#topo"><img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7" width="1369" height="324" style="height:42px"></a>
+    <a class="logo" href="#topo"><img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7" width="1369" height="324" style="height:42px" loading="lazy" decoding="async"></a>
     <p>
       <a href="conteudo/index.html" style="color:rgba(255,255,255,.8)">Central de conteúdo</a><br><br>
       © <span id="ano"></span> Núcleo7 — nucleosete.com.br. Todos os direitos reservados.<br>
