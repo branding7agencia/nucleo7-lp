@@ -19,11 +19,17 @@ window.N7_CONFIG = {
   GA4_ID:  "",   // ex.: "G-XXXXXXXXXX"
 
   /* ---------- DESTINO DOS LEADS ---------- */
-  // URL do webhook (n8n / Make / Zapier). O lead é enviado via POST JSON.
-  WEBHOOK_URL: "",
+  // Google Apps Script "Recebedor de Leads - LP Nucleo7".
+  // Grava na planilha "Leads LP Trafego e Marketing - Nucleo7", aba "Leads":
+  // https://docs.google.com/spreadsheets/d/1RtiOzePuxcadXRDl1oP9grqxej7GRiKgHrZlR7sDVNc/edit
+  WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbxtFSb_GsWfkEta_DsqGGcvvl1W9g6_y2IIDVY8bX65SbVB7YM8KqORhAQ-WurafQQG/exec",
 
-  // Enviar também para o WhatsApp caso o webhook não esteja configurado (fallback)
-  WHATSAPP_FALLBACK: true,
+  // text/plain evita o preflight CORS que o Apps Script não responde.
+  // Se um dia trocar para Make/Zapier/n8n, pode voltar para "application/json".
+  WEBHOOK_CONTENT_TYPE: "text/plain;charset=utf-8",
+
+  // Fallback por WhatsApp DESLIGADO a pedido do cliente.
+  WHATSAPP_FALLBACK: false,
   WHATSAPP_NUMERO: "5577981223827", // Comercial Núcleo7 — (77) 98122-3827
 
   /* ---------- PÁGINAS ---------- */
