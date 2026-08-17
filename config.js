@@ -15,8 +15,11 @@ window.N7_CONFIG = {
   META_CAPI_ENDPOINT: "", // ex.: "https://seu-n8n.com/webhook/capi"
 
   /* ---------- GOOGLE ---------- */
-  GTM_ID:  "",   // ex.: "GTM-XXXXXXX"
-  GA4_ID:  "",   // ex.: "G-XXXXXXXXXX"
+  GTM_ID:  "GTM-W4W74PLC",   // Conta "Núcleo7" · contêiner "nucleosete.com.br"
+  // GA4 = G-YL73DB5NW8 (propriedade "nucleosete.com.br", fluxo "LP Trafego e Marketing").
+  // Deixado VAZIO de propósito: quem carrega o GA4 é o GTM.
+  // Preencher aqui faria a página carregar o GA4 duas vezes e dobrar as sessões.
+  GA4_ID:  "",
 
   /* ---------- DESTINO DOS LEADS ---------- */
   // Google Apps Script "Recebedor de Leads - LP Nucleo7".
