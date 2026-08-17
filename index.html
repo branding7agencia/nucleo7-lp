@@ -280,7 +280,7 @@ button{font:inherit; cursor:pointer}
 }
 .num__l{margin-top:10px; font-size:14px; color:rgba(255,255,255,.72); font-weight:600}
 .prints{display:grid; gap:18px; margin-top:26px}
-@media(min-width:760px){.prints{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:760px){.prints{grid-template-columns:repeat(2,1fr); max-width:720px; margin-inline:auto}}
 .print{
   background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
   border-radius:var(--r); padding:12px; overflow:hidden;
@@ -292,6 +292,90 @@ button{font:inherit; cursor:pointer}
   border:1px dashed rgba(255,255,255,.2); color:rgba(255,255,255,.5); font-size:13px; padding:20px;
 }
 .print__cap{margin-top:10px; font-size:12.5px; color:rgba(255,255,255,.62); text-align:center}
+
+/* ---------- Cases recriados no design da página ---------- */
+.cases{display:grid; gap:18px; margin-top:26px}
+@media(min-width:900px){.cases{grid-template-columns:repeat(3,1fr)}}
+.case{
+  position:relative; display:flex; flex-direction:column;
+  background:linear-gradient(160deg,rgba(255,255,255,.078) 0%,rgba(255,255,255,.028) 100%);
+  border:1px solid rgba(255,255,255,.13); border-radius:var(--r-lg);
+  padding:clamp(22px,3vw,28px); overflow:hidden;
+}
+.case::before{
+  content:''; position:absolute; inset:0 0 auto 0; height:3px;
+  background:linear-gradient(90deg,#FF7000,#FFB067);
+}
+.case__tag{
+  display:inline-block; align-self:flex-start; font-size:11px; font-weight:700;
+  letter-spacing:.09em; text-transform:uppercase; color:#FFB067;
+  background:rgba(255,112,0,.14); border:1px solid rgba(255,154,61,.3);
+  border-radius:999px; padding:6px 12px; line-height:1.2;
+}
+.case__nome{
+  font-family:'Sora'; font-weight:800; font-size:clamp(19px,2.6vw,23px);
+  line-height:1.15; margin:14px 0 4px; letter-spacing:-.01em;
+}
+.case__local{font-size:13px; color:rgba(255,255,255,.55); margin:0 0 20px}
+.case__fat{
+  border-top:1px solid rgba(255,255,255,.11); border-bottom:1px solid rgba(255,255,255,.11);
+  padding:18px 0; margin-bottom:18px;
+}
+.case__fat b{
+  display:block; font-family:'Sora'; font-weight:800; line-height:1;
+  font-size:clamp(30px,4.6vw,38px);
+  background:linear-gradient(135deg,#fff 0%,#FFB067 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.case__fat span{display:block; margin-top:8px; font-size:12px; font-weight:600;
+  letter-spacing:.07em; text-transform:uppercase; color:rgba(255,255,255,.6)}
+.case__stats{display:grid; grid-template-columns:repeat(2,1fr); gap:14px 12px; margin:0 0 20px}
+.case__stats div{min-width:0}
+.case__stats b{display:block; font-family:'Sora'; font-weight:800; font-size:clamp(16px,2.2vw,19px); color:#fff; line-height:1.1}
+.case__stats span{display:block; margin-top:4px; font-size:11.5px; color:rgba(255,255,255,.55); line-height:1.35}
+.case__quote{
+  margin:auto 0 0; font-size:14px; line-height:1.6; color:rgba(255,255,255,.78);
+  font-style:italic; padding-left:14px; border-left:2px solid rgba(255,112,0,.65);
+}
+.case__periodo{margin-top:16px; font-size:11.5px; color:rgba(255,255,255,.42); letter-spacing:.04em}
+.case__ig{
+  display:flex; align-items:center; gap:10px; margin:0 0 18px;
+  background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.1);
+  border-radius:14px; padding:10px 12px;
+}
+.case__ig svg{width:17px;height:17px;flex:none;stroke:#FFB067;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.case__ig .ig__h{display:block; font-family:'Sora'; font-weight:700; font-size:13px; color:#fff; line-height:1.25;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.case__ig .ig__s{display:block; font-size:11.5px; color:rgba(255,255,255,.55); margin-top:3px; line-height:1.25}
+.case__ig > div{min-width:0}
+
+/* ---------- Depoimentos ---------- */
+.depos{display:grid; gap:18px; margin-top:26px}
+@media(min-width:900px){.depos{grid-template-columns:repeat(3,1fr)}}
+.depo{
+  position:relative; display:flex; flex-direction:column;
+  background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--r-lg); padding:clamp(24px,3vw,30px);
+}
+.depo__aspas{
+  font-family:'Sora'; font-weight:800; font-size:52px; line-height:.7;
+  color:rgba(255,112,0,.5); margin-bottom:8px;
+}
+.depo__txt{margin:0 0 22px; font-size:15px; line-height:1.65; color:rgba(255,255,255,.84)}
+.depo__pe{display:flex; align-items:center; gap:12px; margin-top:auto;
+  border-top:1px solid rgba(255,255,255,.11); padding-top:18px}
+.depo__av{
+  flex:none; width:42px;height:42px;border-radius:50%; display:grid;place-items:center;
+  background:var(--grad-cta); font-family:'Sora'; font-weight:800; font-size:15px; color:#fff;
+}
+.depo__pe b{display:block; font-family:'Sora'; font-size:14.5px; color:#fff; line-height:1.2}
+.depo__pe span{display:block; font-size:12.5px; color:rgba(255,255,255,.55); margin-top:3px; line-height:1.3}
+.prova__sub{
+  margin:52px 0 0; text-align:center; font-family:'Sora'; font-weight:800;
+  font-size:clamp(17px,2.4vw,22px); letter-spacing:-.01em; color:#fff;
+}
+.prova__sub + .prova__sub-p{margin:8px auto 0; text-align:center; max-width:52ch;
+  font-size:14.5px; color:rgba(255,255,255,.62)}
 .prova__frase{
   margin-top:38px; text-align:center; font-family:'Sora'; font-weight:700;
   font-size:clamp(17px,2.6vw,23px); line-height:1.35; color:#fff; max-width:26ch; margin-inline:auto;
@@ -661,8 +745,7 @@ button{font:inherit; cursor:pointer}
 <section class="sec prova" id="resultados">
   <div class="wrap">
     <div class="center rv">
-      <span class="eyebrow eyebrow--claro">Prova social</span>
-      <h2 class="h2 mt-16">RESULTADOS FALAM MAIS ALTO.</h2>
+      <h2 class="h2">RESULTADOS FALAM MAIS ALTO.</h2>
     </div>
 
     <div class="numeros">
@@ -671,24 +754,15 @@ button{font:inherit; cursor:pointer}
       <div class="num rv"><div class="num__v">R$ 32.000</div><div class="num__l">Em vendas em um único dia</div></div>
     </div>
 
-    <!-- ===========================================================
-         PRINTS REAIS DA PROVA SOCIAL
-         Substitua cada bloco .print__ph por:
-         <img src="prova/print-1.jpg" alt="Painel de vendas — R$ 101.600 no mês" loading="lazy">
-         Coloque os arquivos na pasta /prova do projeto.
-         =========================================================== -->
+    <!-- Prints reais das conversas com clientes -->
     <div class="prints">
       <figure class="print rv" style="margin:0">
-        <div class="print__ph">PRINT 1<br>prova/print-1.jpg</div>
-        <figcaption class="print__cap">R$ 101.600 — venda acumulada no mês</figcaption>
+        <img src="prova/print-1.jpg" alt="Relatório diário de vendas enviado por cliente — R$ 101.600 acumulado no mês" loading="lazy" decoding="async" onerror="this.closest('figure').remove()">
+        <figcaption class="print__cap">Relatório enviado pelo cliente — R$ 101.600 no mês</figcaption>
       </figure>
       <figure class="print rv" style="margin:0">
-        <div class="print__ph">PRINT 2<br>prova/print-2.jpg</div>
-        <figcaption class="print__cap">R$ 121.800 — venda acumulada no mês</figcaption>
-      </figure>
-      <figure class="print rv" style="margin:0">
-        <div class="print__ph">PRINT 3<br>prova/print-3.jpg</div>
-        <figcaption class="print__cap">R$ 32.000 — vendas em um único dia</figcaption>
+        <img src="prova/print-2.jpg" alt="Relatório diário de vendas enviado por cliente — R$ 32.000 no dia e R$ 121.800 no mês" loading="lazy" decoding="async" onerror="this.closest('figure').remove()">
+        <figcaption class="print__cap">Relatório enviado pelo cliente — R$ 32.000 no dia · R$ 121.800 no mês</figcaption>
       </figure>
     </div>
 
@@ -696,9 +770,114 @@ button{font:inherit; cursor:pointer}
       Não estamos falando apenas de anúncios.<br>Estamos falando de <span style="color:#FFB067">estratégia aplicada ao negócio</span>.
     </p>
 
+    <h3 class="prova__sub rv">OPERAÇÕES REAIS. NÚMEROS REAIS.</h3>
+    <p class="prova__sub-p rv">Três empresas, três segmentos diferentes, o mesmo método aplicado em 3 meses de operação.</p>
+
+    <div class="cases">
+
+      <article class="case rv">
+        <span class="case__tag">E-commerce · Alimentos</span>
+        <h4 class="case__nome">Mercato Sadia</h4>
+        <p class="case__local">Unidades do Grupo BRF-Sadia · São Paulo</p>
+        <div class="case__ig">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
+          <div><span class="ig__h">@mercatosadia</span><span class="ig__s">227 posts · 30 mil seguidores</span></div>
+        </div>
+        <div class="case__fat">
+          <b>R$ 348 mil</b>
+          <span>Em faturamento</span>
+        </div>
+        <div class="case__stats">
+          <div><b>R$ 78.022</b><span>Investimento em tráfego</span></div>
+          <div><b>150 mil</b><span>Usuários no site</span></div>
+          <div><b>920</b><span>Pedidos realizados</span></div>
+          <div><b>+5.000</b><span>Novos seguidores</span></div>
+        </div>
+        <p class="case__periodo">Período analisado: 3 meses</p>
+      </article>
+
+      <article class="case rv">
+        <span class="case__tag">Clínica Odontológica</span>
+        <h4 class="case__nome">Mais Sorrisos</h4>
+        <p class="case__local">Vitória da Conquista · BA</p>
+        <div class="case__ig">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
+          <div><span class="ig__h">@clinica.maissorrisos</span><span class="ig__s">264 posts · 4.727 seguidores</span></div>
+        </div>
+        <div class="case__fat">
+          <b>R$ 383 mil</b>
+          <span>Em faturamento</span>
+        </div>
+        <div class="case__stats">
+          <div><b>R$ 4.828</b><span>Investimento em tráfego</span></div>
+          <div><b>500</b><span>Leads gerados</span></div>
+          <div><b>65</b><span>Fechamentos (30 tráfego · 35 indicação)</span></div>
+          <div><b>+550</b><span>Novos seguidores</span></div>
+        </div>
+        <p class="case__periodo">Período analisado: 3 meses</p>
+      </article>
+
+      <article class="case rv">
+        <span class="case__tag">Transplante Capilar · Tricologia</span>
+        <h4 class="case__nome">Infinite Fio</h4>
+        <p class="case__local">Vitória da Conquista · BA</p>
+        <div class="case__ig">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="#FFB067" stroke="none"/></svg>
+          <div><span class="ig__h">@infinitefio.conquista</span><span class="ig__s">255 posts · 6.713 seguidores</span></div>
+        </div>
+        <div class="case__fat">
+          <b>R$ 718 mil</b>
+          <span>Em faturamento</span>
+        </div>
+        <div class="case__stats">
+          <div><b>R$ 25.833</b><span>Investimento em tráfego</span></div>
+          <div><b>2.208</b><span>Leads gerados</span></div>
+          <div><b>91</b><span>Fechamentos (52 tráfego · 19 indicação)</span></div>
+          <div><b>+1.271</b><span>Novos seguidores</span></div>
+        </div>
+        <p class="case__periodo">Período analisado: 3 meses</p>
+      </article>
+
+    </div>
+
+    <h3 class="prova__sub rv">O QUE OS CLIENTES DIZEM.</h3>
+    <p class="prova__sub-p rv">Quem já está dentro da operação, falando com as próprias palavras.</p>
+
+    <div class="depos">
+
+      <article class="depo rv">
+        <div class="depo__aspas">“</div>
+        <p class="depo__txt">O que mais me surpreendeu foi o suporte e a dedicação da equipe para encontrar a estratégia certa. Não é só tráfego pago — é um acompanhamento estratégico e completo, do começo ao fim.</p>
+        <div class="depo__pe">
+          <div class="depo__av">B</div>
+          <div><b>Dr. Bruno</b><span>Dentista · Mais Sorrisos</span></div>
+        </div>
+      </article>
+
+      <article class="depo rv">
+        <div class="depo__aspas">“</div>
+        <p class="depo__txt">Eu já tinha tentado com outras empresas. O que realmente me surpreendeu na Núcleo7 foi a dedicação comercial e estratégica, o acompanhamento de perto e o Yury sempre presente trazendo inovação que nos ajuda a potencializar os resultados.</p>
+        <div class="depo__pe">
+          <div class="depo__av">A</div>
+          <div><b>Dra. Ana Paula Oliveira</b><span>Infinite Fio · Vitória da Conquista</span></div>
+        </div>
+      </article>
+
+      <article class="depo rv">
+        <div class="depo__aspas">“</div>
+        <p class="depo__txt">O que mais gosto nessa equipe é que eles têm visão de mercado e varejo, agem rápido e dão um suporte completo. Conheço o Yury há mais de 11 anos e sei o líder e o profissional que ele é. Criamos uma operação digital do zero, com perfil novo e ações novas no Mercato Sadia, e isso foi uma alavanca para nós.</p>
+        <div class="depo__pe">
+          <div class="depo__av">C</div>
+          <div><b>Cesar Martins</b><span>Diretor Executivo · Mercato Sadia</span></div>
+        </div>
+      </article>
+
+    </div>
+
     <p class="disclaimer">
       Resultados de operações reais conduzidas pela Núcleo7. Os números apresentados referem-se a casos específicos
       e não representam promessa, garantia ou previsão de resultado para outras empresas.
+      Depoimentos cedidos pelos próprios clientes.
     </p>
   </div>
 </section>
@@ -1095,7 +1274,7 @@ button{font:inherit; cursor:pointer}
 <!-- ===================== RODAPÉ ===================== -->
 <footer class="rodape">
   <div class="wrap rodape__in">
-    <a class="logo" href="#topo"><img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7" width="1369" height="324" style="height:42px" loading="lazy" decoding="async"></a>
+    <a class="logo" href="#topo"><img src="assets/logo-nucleo7-laranja.png" alt="Núcleo7" width="1369" height="324" style="height:42px" loading="lazy" decoding="async" onerror="this.closest('figure').remove()"></a>
     <p>
       <a href="conteudo/index.html" style="color:rgba(255,255,255,.8)">Central de conteúdo</a><br><br>
       © <span id="ano"></span> Núcleo7 — nucleosete.com.br. Todos os direitos reservados.<br>
