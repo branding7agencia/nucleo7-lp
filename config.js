@@ -18,11 +18,7 @@ window.N7_CONFIG = {
 
   // Coleta propria: grava visita e cada etapa do formulario no banco (o que
   // alimenta a area admin) e repassa o evento ao GA4 pelo servidor.
-  // Vazio ate as tabelas lp_events/lp_leads existirem em producao. Com a URL
-  // preenchida antes disso, toda visita bateria num endpoint que ainda nao
-  // grava nada. Valor final:
-  // https://tlhdqizuvjvqtbsflmmr.supabase.co/functions/v1/lp-track
-  LP_TRACK_ENDPOINT: "",
+  LP_TRACK_ENDPOINT: "https://tlhdqizuvjvqtbsflmmr.supabase.co/functions/v1/lp-track",
 
   /* ---------- GOOGLE ---------- */
   GTM_ID:  "GTM-W4W74PLC",   // Conta "Núcleo7" · contêiner "nucleosete.com.br"
