@@ -11,8 +11,10 @@ window.N7_CONFIG = {
   // que estava disparando os eventos na conta errada.
   META_PIXEL_ID: "840498648731910",
 
-  // Token da Conversions API (opcional, usado pelo servidor/webhook — NÃO exponha em produção)
-  META_CAPI_ENDPOINT: "", // ex.: "https://seu-n8n.com/webhook/capi"
+  // Conversions API: a LP manda o evento para ESTA URL, e o servidor repassa
+  // para a Meta. O token de acesso fica na Edge Function (variavel de ambiente
+  // LP_META_CAPI_TOKEN), nunca aqui — este arquivo e publico.
+  META_CAPI_ENDPOINT: "https://tlhdqizuvjvqtbsflmmr.supabase.co/functions/v1/lp-meta-capi",
 
   /* ---------- GOOGLE ---------- */
   GTM_ID:  "GTM-W4W74PLC",   // Conta "Núcleo7" · contêiner "nucleosete.com.br"

@@ -145,16 +145,68 @@
   var STANDARD = ["PageView", "ViewContent", "Lead", "CompleteRegistration",
                   "Contact", "Schedule", "SubmitApplication", "InitiateCheckout"];
 
-  function track(evento, params, eventId) {
+  // Eventos que a Edge Function lp-meta-capi aceita. Precisa bater com a
+  // allowlist de la — o que nao estiver nos dois lados volta 400 e so polui o
+  // console. Os demais (ClickCTA, FormStep...) continuam so no browser.
+  var CAPI_EVENTS = ["PageView", "ViewContent", "Lead", "Contact",
+                     "CompleteRegistration", "Scroll25", "Scroll50", "Scroll75", "Scroll100"];
+
+  // Copia do evento pelo servidor (Conversions API). Existe porque bloqueador
+  // de anuncio e ITP do Safari matam parte dos disparos do browser. O mesmo
+  // event_id vai nos dois caminhos: a Meta descarta a copia e nao conta dobrado.
+  //
+  // Nao manda token nenhum — quem guarda o token e a Edge Function.
+  function sendCapi(evento, eventId, params, userData) {
+    if (!CFG.META_CAPI_ENDPOINT || !eventId) return;
+    if (CAPI_EVENTS.indexOf(evento) === -1) return;
+
+    var body = {
+      event_name: evento,
+      event_id: eventId,
+      event_source_url: window.location.href,
+      custom_data: params || {},
+      user_data: Object.assign({
+        fbp: getCookie("_fbp"),
+        fbc: getCookie("_fbc")
+      }, userData || {})
+    };
+
+    // keepalive: o Lead dispara junto com a troca de pagina para o obrigado.html.
+    // Sem isso o navegador cancela a requisicao no unload e o evento se perde.
+    try {
+      fetch(CFG.META_CAPI_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+        keepalive: true,
+        mode: "cors"
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; });
+      }).then(function (j) {
+        LOG("CAPI", evento, j && j.ok ? "ok" : "falhou", j);
+      }).catch(function (e) {
+        // CAPI e redundancia: se cair, o pixel do browser ja registrou.
+        LOG("CAPI falhou (evento segue valendo pelo browser):", evento, e);
+      });
+    } catch (e) {
+      LOG("CAPI nao pode ser chamada:", e);
+    }
+  }
+
+  function track(evento, params, eventIdArg, userData) {
     params = params || {};
     var payload = Object.assign({}, params, {
       campanha: CFG.NOME_CAMPANHA || "",
       origem_sessao: ATTRIB.origem_sessao || ""
     });
 
+    // Todo evento espelhado na CAPI precisa de id proprio para a deduplicacao.
+    // Quem chama pode passar o seu (o formulario passa, para casar com a planilha).
+    var eid = eventIdArg || (CFG.META_CAPI_ENDPOINT && CAPI_EVENTS.indexOf(evento) > -1 ? eventId() : "");
+
     // Meta
     if (pixelReady && window.fbq) {
-      var opts = eventId ? { eventID: eventId } : undefined;
+      var opts = eid ? { eventID: eid } : undefined;
       if (STANDARD.indexOf(evento) > -1) fbq('track', evento, payload, opts);
       else fbq('trackCustom', evento, payload, opts);
     }
@@ -162,8 +214,10 @@
     if (window.gtag) gtag('event', evento, payload);
     // GTM
     dataLayer.push(Object.assign({ event: 'n7_' + evento }, payload));
+    // Meta pelo servidor
+    sendCapi(evento, eid, payload, userData);
 
-    LOG("evento:", evento, payload, eventId ? "(id " + eventId + ")" : "");
+    LOG("evento:", evento, payload, eid ? "(id " + eid + ")" : "");
   }
 
   function eventId() {

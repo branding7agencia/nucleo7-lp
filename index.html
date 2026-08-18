@@ -1624,7 +1624,14 @@ Transplante: 7 (1 INDICAÇÃO)
       faturamento: dados.faturamento || '',
       colaboradores: dados.colaboradores || '',
       value: 1, currency: 'BRL'
-    }, eid);
+    }, eid, {
+      // Vai para a Conversions API hasheado em SHA-256 pela Edge Function.
+      // Sai daqui em texto puro e nunca chega assim na Meta.
+      email: dados.email || '',
+      phone: payload.whatsapp_e164 || '',
+      first_name: (dados.nome || '').split(' ')[0] || '',
+      last_name: (dados.nome || '').split(' ').slice(1).join(' ')
+    });
 
     function concluir(){
       try { sessionStorage.setItem('n7_lead', JSON.stringify({nome:dados.nome, empresa:dados.empresa, event_id:eid})); } catch(err){}
