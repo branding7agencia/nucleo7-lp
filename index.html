@@ -1481,7 +1481,19 @@ Transplante: 7 (1 INDICAÇÃO)
   var iniciou = false;
 
   f.addEventListener('input', function(){
-    if (!iniciou){ iniciou = true; if (window.N7) N7.track('InitiateCheckout', { content_name:'formulario-selecao' }); }
+    if (!iniciou){
+      iniciou = true;
+      if (window.N7){
+        N7.track('InitiateCheckout', { content_name:'formulario-selecao' });
+        // FormStep1 nasce AQUI, e nao quando a etapa 1 aparece na tela.
+        // mostraEtapa() so avisa quando n > maxVisto, e maxVisto ja comeca em 1,
+        // entao a etapa 1 nunca se anunciava: o funil pulava de visita direto
+        // para etapa 2. Disparar na primeira digitacao tambem e o que faz o
+        // numero significar alguma coisa — "chegou na etapa 1" seria so o
+        // total de visitas, ja que o formulario esta na propria pagina.
+        N7.track('FormStep1', { etapa: 1 });
+      }
+    }
   }, {once:false});
 
   function limparErro(el){
