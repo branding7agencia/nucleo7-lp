@@ -7,9 +7,9 @@
 window.N7_CONFIG = {
 
   /* ---------- META / FACEBOOK ---------- */
-  // Pixel "Nucleo7 - Site" — criado em 16/08/2026 na conta Núcleo7 (Nova Conta de Anúncio)
-  // Conta de anúncios: 1439142090326862 · Portfólio: Agência B7 (436217605742161)
-  META_PIXEL_ID: "1045184531818561",
+  // Pixel em uso desde 18/08/2026. Substituiu o 1045184531818561 ("Nucleo7 - Site"),
+  // que estava disparando os eventos na conta errada.
+  META_PIXEL_ID: "840498648731910",
 
   // Token da Conversions API (opcional, usado pelo servidor/webhook — NÃO exponha em produção)
   META_CAPI_ENDPOINT: "", // ex.: "https://seu-n8n.com/webhook/capi"
