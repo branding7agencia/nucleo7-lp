@@ -145,11 +145,49 @@
   var STANDARD = ["PageView", "ViewContent", "Lead", "CompleteRegistration",
                   "Contact", "Schedule", "SubmitApplication", "InitiateCheckout"];
 
+  /* ---------------------------------------------------------
+     4.0 IDENTIDADE DA VISITA
+     --------------------------------------------------------- */
+  // Um id por visitante, guardado no navegador. E o que permite contar o funil
+  // por PESSOA: sem ele, quem volta na etapa 2 tres vezes viraria tres pessoas
+  // e a taxa de conclusao sairia menor do que e.
+  //
+  // localStorage e nao cookie de propósito: nao vai no cabecalho de toda
+  // requisicao e sobrevive ao fechamento da aba.
+  var SESSION_KEY = 'n7_sid';
+  function sessionId() {
+    try {
+      var id = localStorage.getItem(SESSION_KEY);
+      if (!id) {
+        id = 's_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(SESSION_KEY, id);
+      }
+      return id;
+    } catch (e) {
+      // Navegador em modo restrito: o funil desta visita fica solto, mas o
+      // evento nao pode ser perdido por causa disso.
+      return 's_' + Date.now().toString(36);
+    }
+  }
+  var SID = sessionId();
+
+  // O GA4 grava o proprio id no cookie _ga como "GA1.1.<id>.<ts>". Mandar o
+  // mesmo id no Measurement Protocol faz o evento do servidor cair na MESMA
+  // sessao do evento do browser, em vez de inventar um usuario novo.
+  function gaClientId() {
+    var raw = getCookie('_ga');
+    if (!raw) return '';
+    var p = raw.split('.');
+    return p.length >= 4 ? p[2] + '.' + p[3] : '';
+  }
+
   // Eventos que a Edge Function lp-meta-capi aceita. Precisa bater com a
   // allowlist de la — o que nao estiver nos dois lados volta 400 e so polui o
   // console. Os demais (ClickCTA, FormStep...) continuam so no browser.
   var CAPI_EVENTS = ["PageView", "ViewContent", "Lead", "Contact",
-                     "CompleteRegistration", "Scroll25", "Scroll50", "Scroll75", "Scroll100"];
+                     "CompleteRegistration", "InitiateCheckout",
+                     "FormStep1", "FormStep2", "FormStep3",
+                     "Scroll25", "Scroll50", "Scroll75", "Scroll100"];
 
   // Copia do evento pelo servidor (Conversions API). Existe porque bloqueador
   // de anuncio e ITP do Safari matam parte dos disparos do browser. O mesmo
@@ -193,7 +231,41 @@
     }
   }
 
-  function track(evento, params, eventIdArg, userData) {
+  // Coleta propria: grava o evento no banco (area admin) e repassa ao GA4 pelo
+  // servidor. Independente da CAPI da Meta — se um cair, o outro continua.
+  function sendLpTrack(evento, params, eventIdEvento, lead) {
+    if (!CFG.LP_TRACK_ENDPOINT) return;
+
+    var body = {
+      session_id: SID,
+      event_name: evento,
+      event_id: eventIdEvento || '',
+      ga_client_id: gaClientId(),
+      params: params || {},
+      attribution: attribution()
+    };
+    if (lead) body.lead = lead;
+
+    try {
+      fetch(CFG.LP_TRACK_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+        keepalive: true,
+        mode: 'cors'
+      }).then(function (r) {
+        return r.json().catch(function () { return {}; });
+      }).then(function (j) {
+        LOG('lp-track', evento, j && j.ok ? 'ok' : 'falhou', j);
+      }).catch(function (e) {
+        LOG('lp-track falhou:', evento, e);
+      });
+    } catch (e) {
+      LOG('lp-track nao pode ser chamada:', e);
+    }
+  }
+
+  function track(evento, params, eventIdArg, userData, lead) {
     params = params || {};
     var payload = Object.assign({}, params, {
       campanha: CFG.NOME_CAMPANHA || "",
@@ -216,6 +288,8 @@
     dataLayer.push(Object.assign({ event: 'n7_' + evento }, payload));
     // Meta pelo servidor
     sendCapi(evento, eid, payload, userData);
+    // Coleta propria + GA4 pelo servidor
+    sendLpTrack(evento, payload, eid, lead);
 
     LOG("evento:", evento, payload, eid ? "(id " + eid + ")" : "");
   }
@@ -292,6 +366,7 @@
   window.N7 = {
     track: track,
     eventId: eventId,
+    sessionId: function () { return SID; },
     attribution: attribution,
     config: CFG,
     log: LOG

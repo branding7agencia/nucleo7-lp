@@ -20,11 +20,11 @@
 <meta property="og:title" content="Tráfego pago e marketing digital para sua empresa. Você só paga depois da primeira venda.">
 <meta property="og:description" content="Uma empresa será selecionada para receber uma operação estratégica de tráfego pago, marketing digital e suporte comercial da Núcleo7.">
 <meta property="og:url" content="https://nucleosete.com.br/">
-<meta property="og:image" content="https://nucleosete.com.br/assets/og-image.jpg">
+<meta property="og:image" content="https://trafegoemarketing.nucleosete.com.br/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://nucleosete.com.br/assets/og-image.jpg">
+<meta name="twitter:image" content="https://trafegoemarketing.nucleosete.com.br/assets/og-image.png">
 
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
@@ -101,6 +101,23 @@ button{font:inherit; cursor:pointer}
 .eyebrow--claro{color:#FFD9BC; background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.14)}
 .hero .eyebrow{max-width:min(100%,46ch); text-align:center; line-height:1.5; text-wrap:balance}
 @media(max-width:560px){ .hero .eyebrow{font-size:11px; letter-spacing:.10em; padding:10px 16px} }
+
+/* No celular o hero terminava a 754px do topo — o botao nascia abaixo da
+   dobra e so aparecia depois de rolar. Quem chega por anuncio decide nos
+   primeiros segundos, entao o CTA precisa estar visivel sem rolagem.
+   Aqui o bloco e comprimido ate o botao caber na primeira tela.
+   A .hero__nota sai porque repete o que o texto abaixo do botao ja diz
+   ("sem pagamento antecipado"); no desktop, onde sobra espaco, ela fica. */
+@media(max-width:560px){
+  .hero{ padding:26px 0 40px }
+  .hero h1{ margin-top:14px; font-size:clamp(26px,7.2vw,32px); line-height:1.08 }
+  .hero__promessa{ margin-top:14px; padding:12px 18px; font-size:clamp(19px,5.4vw,24px) }
+  .hero .lead{ margin-top:16px; font-size:14.5px; line-height:1.5 }
+  .hero__nota{ display:none }
+  .hero .cta-bloco{ margin-top:20px }
+  .hero .btn-nota{ margin-top:12px; font-size:12.5px; line-height:1.45 }
+  .hero-selos{ margin-top:22px }
+}
 .h2{font-size:clamp(28px,4.4vw,46px)}
 .h3{font-size:clamp(20px,2.6vw,26px); font-weight:700}
 .lead{font-size:clamp(16px,1.9vw,19px); color:var(--tinta-2); line-height:1.65}
@@ -1249,11 +1266,6 @@ Transplante: 7 (1 INDICAÇÃO)
               </select>
               <span class="msg-erro">Selecione uma opção.</span>
             </div>
-            <div class="campo full">
-              <label for="motivo">Por que você acredita que sua empresa deveria ser selecionada? <span>*</span></label>
-              <textarea id="motivo" name="motivo" required minlength="20" placeholder="Escreva com suas palavras. Essa resposta pesa muito na avaliação."></textarea>
-              <span class="msg-erro">Escreva pelo menos algumas linhas (mínimo 20 caracteres).</span>
-            </div>
           </div>
         </fieldset>
 
@@ -1532,7 +1544,6 @@ Transplante: 7 (1 INDICAÇÃO)
     if (ok && el.id === 'whatsapp')      ok = v.replace(/\D/g,'').length >= 10;
     else if (ok && el.type === 'email')  ok = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v);
     else if (ok && el.id === 'nome')     ok = v.length >= 3 && v.indexOf(' ') > 0;
-    else if (ok && el.id === 'motivo')   ok = v.length >= 20;
     el.closest('.campo').classList.toggle('erro', !ok);
     return ok;
   }
@@ -1570,7 +1581,6 @@ Transplante: 7 (1 INDICAÇÃO)
       else if (el.id === 'whatsapp'){ ok = v.replace(/\D/g,'').length >= 10; }
       else if (el.type === 'email'){ ok = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v); }
       else if (el.id === 'nome'){ ok = v.length >= 3 && v.indexOf(' ') > 0; }
-      else if (el.id === 'motivo'){ ok = v.length >= 20; }
       el.closest('.campo').classList.toggle('erro', !ok);
       if (!ok) invalidos.push(el);
     });
@@ -1631,7 +1641,7 @@ Transplante: 7 (1 INDICAÇÃO)
       phone: payload.whatsapp_e164 || '',
       first_name: (dados.nome || '').split(' ')[0] || '',
       last_name: (dados.nome || '').split(' ').slice(1).join(' ')
-    });
+    }, Object.assign({ whatsapp_e164: payload.whatsapp_e164 }, dados));
 
     function concluir(){
       try { sessionStorage.setItem('n7_lead', JSON.stringify({nome:dados.nome, empresa:dados.empresa, event_id:eid})); } catch(err){}
