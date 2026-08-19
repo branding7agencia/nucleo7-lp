@@ -1491,10 +1491,23 @@ Transplante: 7 (1 INDICAÇÃO)
         // para etapa 2. Disparar na primeira digitacao tambem e o que faz o
         // numero significar alguma coisa — "chegou na etapa 1" seria so o
         // total de visitas, ja que o formulario esta na propria pagina.
-        N7.track('FormStep1', { etapa: 1 });
+        N7.track('FormStep1', { etapa: 1 }, null, null, dadosAtuais());
       }
     }
   }, {once:false});
+
+  // Snapshot do formulario no estado atual, para o salvamento progressivo.
+  // Campos vazios ficam de fora: o merge no banco nunca sobrescreve um valor
+  // ja gravado com vazio, e mandar '' so aumentaria o corpo do POST.
+  function dadosAtuais(){
+    var d = {};
+    new FormData(f).forEach(function(v,k){
+      if (typeof v === 'string' && v.trim()) d[k] = v.trim();
+    });
+    delete d.empresa_site; // honeypot
+    if (d.whatsapp) d.whatsapp_e164 = '55' + d.whatsapp.replace(/\D/g,'');
+    return d;
+  }
 
   function limparErro(el){
     var c = el.closest('.campo'); if (c) c.classList.remove('erro');
@@ -1538,7 +1551,10 @@ Transplante: 7 (1 INDICAÇÃO)
     }
     if (n > maxVisto){
       maxVisto = n;
-      if (window.N7) N7.track('FormStep' + n, { etapa: n });
+      // Manda junto o que ja foi preenchido: e o que permite resgatar quem
+      // desiste no meio. Sem isso a pessoa que larga na etapa 2 vira so um
+      // numero no funil, mesmo tendo digitado nome, WhatsApp e e-mail.
+      if (window.N7) N7.track('FormStep' + n, { etapa: n }, null, null, dadosAtuais());
     }
   }
 
