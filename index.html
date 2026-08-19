@@ -1495,16 +1495,15 @@ Transplante: 7 (1 INDICAÇÃO)
   f.addEventListener('input', function(){
     if (!iniciou){
       iniciou = true;
-      if (window.N7){
-        N7.track('InitiateCheckout', { content_name:'formulario-selecao' });
-        // FormStep1 nasce AQUI, e nao quando a etapa 1 aparece na tela.
-        // mostraEtapa() so avisa quando n > maxVisto, e maxVisto ja comeca em 1,
-        // entao a etapa 1 nunca se anunciava: o funil pulava de visita direto
-        // para etapa 2. Disparar na primeira digitacao tambem e o que faz o
-        // numero significar alguma coisa — "chegou na etapa 1" seria so o
-        // total de visitas, ja que o formulario esta na propria pagina.
-        N7.track('FormStep1', { etapa: 1 }, null, null, dadosAtuais());
-      }
+      // Comecou a digitar. Nao e "preencheu a etapa 1" — quem digita o nome e
+      // desiste no campo seguinte nao respondeu a etapa. FormStep1 sai depois,
+      // quando a validacao da etapa 1 passa.
+      //
+      // Leva o rascunho junto assim mesmo: quem abandona ANTES de terminar a
+      // etapa 1 tambem deixa contato aproveitavel, e sem isto ele se perderia
+      // por inteiro.
+      if (window.N7) N7.track('InitiateCheckout', { content_name:'formulario-selecao', etapa: 0 },
+                              null, null, dadosAtuais());
     }
   }, {once:false});
 
@@ -1521,6 +1520,29 @@ Transplante: 7 (1 INDICAÇÃO)
     return d;
   }
 
+  // A primeira digitacao pega so a primeira letra do nome. Este handler
+  // reenvia o rascunho conforme a pessoa avanca pelos campos, para que quem
+  // desiste no meio da etapa 1 chegue com contato utilizavel.
+  //
+  // Limitado de proposito: so quando o conteudo mudou, no maximo a cada 2s e
+  // ate 5 vezes na visita. Sem esses limites, cada blur viraria uma linha em
+  // lp_events e a tabela cresceria por nada.
+  var ultimoRascunho = '', enviosRascunho = 0, ultimoEnvio = 0;
+  f.addEventListener('blur', function(){
+    if (!iniciou || enviosRascunho >= 5) return;
+    var d = dadosAtuais();
+    if (!d.nome && !d.email && !d.whatsapp) return;
+
+    var assinatura = [d.nome, d.email, d.whatsapp].join('|');
+    var agora = Date.now();
+    if (assinatura === ultimoRascunho || agora - ultimoEnvio < 2000) return;
+
+    ultimoRascunho = assinatura;
+    ultimoEnvio = agora;
+    enviosRascunho++;
+    if (window.N7) N7.track('InitiateCheckout', { content_name:'rascunho', etapa: 0 }, null, null, d);
+  }, true);
+
   function limparErro(el){
     var c = el.closest('.campo'); if (c) c.classList.remove('erro');
   }
@@ -1535,6 +1557,9 @@ Transplante: 7 (1 INDICAÇÃO)
   var btnNext  = document.getElementById('btn-avancar');
   var atual    = 1;
   var maxVisto = 1;
+  // Ate onde a pessoa efetivamente RESPONDEU. Separado de maxVisto, que e so
+  // por onde ela passou.
+  var maxPreenchida = 0;
 
   function pintaProgresso(){
     barra.style.width = (atual / etapas.length * 100) + '%';
@@ -1561,13 +1586,25 @@ Transplante: 7 (1 INDICAÇÃO)
       var primeiro = etapas[n-1].querySelector('input,select,textarea');
       if (primeiro) setTimeout(function(){ primeiro.focus({preventScroll:true}); }, 420);
     }
-    if (n > maxVisto){
-      maxVisto = n;
-      // Manda junto o que ja foi preenchido: e o que permite resgatar quem
-      // desiste no meio. Sem isso a pessoa que larga na etapa 2 vira so um
-      // numero no funil, mesmo tendo digitado nome, WhatsApp e e-mail.
-      if (window.N7) N7.track('FormStep' + n, { etapa: n }, null, null, dadosAtuais());
-    }
+    if (n > maxVisto) maxVisto = n;
+  }
+
+  // FormStep{n} = a etapa n foi PREENCHIDA, nao "a etapa n apareceu na tela".
+  //
+  // Antes o evento saia em mostraEtapa(), ou seja, ao CHEGAR na etapa. Quem
+  // preenchia so a etapa 1 e avancava aparecia no relatorio como "chegou na
+  // etapa 2" sem ter respondido nada dela — o numero dizia por onde a pessoa
+  // passou, e o que interessa e o que ela respondeu.
+  //
+  // Agora sai quando a validacao daquela etapa passa: so avanca quem preencheu
+  // tudo o que ela pedia.
+  function etapaPreenchida(n){
+    if (n <= maxPreenchida) return;
+    maxPreenchida = n;
+    // Manda junto o que ja foi preenchido: e o que permite resgatar quem
+    // desiste no meio. Sem isso a pessoa que larga na etapa 2 vira so um
+    // numero no funil, mesmo tendo digitado nome, WhatsApp e e-mail.
+    if (window.N7) N7.track('FormStep' + n, { etapa: n }, null, null, dadosAtuais());
   }
 
   function validaEtapa(n){
@@ -1598,6 +1635,7 @@ Transplante: 7 (1 INDICAÇÃO)
       if (window.N7) N7.track('FormError', { etapa: atual, campos_invalidos: ruins.length });
       return;
     }
+    etapaPreenchida(atual);
     mostraEtapa(atual + 1, true);
   });
 
@@ -1650,6 +1688,10 @@ Transplante: 7 (1 INDICAÇÃO)
       if (window.N7) N7.track('FormError', { campos_invalidos: ruins.length });
       return;
     }
+
+    // Passou pelo valida() do formulario inteiro, entao a etapa 3 tambem foi
+    // respondida. E aqui que ela se anuncia — nao ao aparecer na tela.
+    etapaPreenchida(3);
 
     btn.disabled = true;
     btn.textContent = 'ENVIANDO...';
