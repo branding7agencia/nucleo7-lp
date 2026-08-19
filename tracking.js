@@ -16,7 +16,29 @@
      Guarda no sessionStorage para sobreviver à navegação
      (ex.: index.html -> obrigado.html)
      --------------------------------------------------------- */
-  var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid", "gclid", "ttclid"];
+  // Tudo que pode vir na URL e diz de onde a pessoa veio.
+  //
+  // `ad` e o nome do anuncio, mandado pela Meta na URL do criativo. Sem ele o
+  // relatorio para em "veio do Instagram" e nunca chega em "veio DESTE
+  // anuncio", que e a pergunta que decide o que pausar.
+  //
+  // Os do Google (adgroup, keyword, placement, network, device) vem do
+  // ValueTrack: {campaignid}, {creative}, {adgroupid}, {keyword},
+  // {placement}, {network}, {device} sao substituidos pelo proprio Google no
+  // clique. Sem captura-los, campanha de busca vira uma linha so no painel.
+  var UTM_KEYS = [
+    "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term",
+    "fbclid", "gclid", "ttclid",
+    "ad",
+    "adgroup", "keyword", "placement", "network", "device"
+  ];
+
+  // O Google manda a macro crua quando a URL final foi montada errada
+  // ("{keyword}" em vez da palavra). Guardar isso sujaria o relatorio com uma
+  // origem chamada {campaignid} — ja aconteceu com {{ad.name}} vindo da Meta.
+  function macroNaoSubstituida(v) {
+    return /^\{.*\}$/.test(v) || /^\{\{.*\}\}$/.test(v);
+  }
   var STORE_KEY = "n7_attrib";
 
   function getParams() {
@@ -52,7 +74,7 @@
 
     UTM_KEYS.forEach(function (k) {
       var v = p.get(k);
-      if (v) { stored[k] = v; found = true; }
+      if (v && !macroNaoSubstituida(v)) { stored[k] = v; found = true; }
     });
 
     // Primeira sessão: registra landing page e origem
@@ -335,6 +357,13 @@
       utm_term:     a.utm_term     || "",
       fbclid:       a.fbclid       || "",
       gclid:        a.gclid        || "",
+      // Nome do anuncio (Meta) e detalhamento do Google Ads (ValueTrack).
+      anuncio:      a.ad           || "",
+      adgroup:      a.adgroup      || "",
+      keyword:      a.keyword      || "",
+      placement:    a.placement    || "",
+      network:      a.network      || "",
+      device_ads:   a.device       || "",
       fbp:          getCookie("_fbp"),
       fbc:          getCookie("_fbc"),
       pagina_url:   window.location.href,
