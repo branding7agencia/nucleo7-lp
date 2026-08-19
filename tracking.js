@@ -184,6 +184,10 @@
   // Eventos que a Edge Function lp-meta-capi aceita. Precisa bater com a
   // allowlist de la — o que nao estiver nos dois lados volta 400 e so polui o
   // console. Os demais (ClickCTA, FormStep...) continuam so no browser.
+  // Eventos que a Meta recebe SO pelo servidor, para o gate de 7 dias valer.
+  // Ver comentario dentro de track().
+  var SO_SERVIDOR = ["FormStep1", "FormStep2", "FormStep3", "Lead", "InitiateCheckout"];
+
   var CAPI_EVENTS = ["PageView", "ViewContent", "Lead", "Contact",
                      "CompleteRegistration", "InitiateCheckout",
                      "FormStep1", "FormStep2", "FormStep3",
@@ -276,8 +280,15 @@
     // Quem chama pode passar o seu (o formulario passa, para casar com a planilha).
     var eid = eventIdArg || (CFG.META_CAPI_ENDPOINT && CAPI_EVENTS.indexOf(evento) > -1 ? eventId() : "");
 
-    // Meta
-    if (pixelReady && window.fbq) {
+    // Meta.
+    //
+    // Os eventos do formulario NAO saem pelo navegador: vao so pelo servidor,
+    // onde existe o gate de "um por telefone a cada 7 dias". Disparar aqui
+    // tambem furaria o gate — o event_id da deduplicacao da Meta so vale por
+    // 48h, e o pedido e de 7 dias, entao o segundo preenchimento entraria como
+    // pessoa nova.
+    var soPeloServidor = SO_SERVIDOR.indexOf(evento) > -1;
+    if (pixelReady && window.fbq && !soPeloServidor) {
       var opts = eid ? { eventID: eid } : undefined;
       if (STANDARD.indexOf(evento) > -1) fbq('track', evento, payload, opts);
       else fbq('trackCustom', evento, payload, opts);
@@ -286,8 +297,21 @@
     if (window.gtag) gtag('event', evento, payload);
     // GTM
     dataLayer.push(Object.assign({ event: 'n7_' + evento }, payload));
-    // Meta pelo servidor
-    sendCapi(evento, eid, payload, userData);
+    // Meta pelo servidor.
+    //
+    // Sem telefone o gate de 7 dias nao tem por onde deduplicar, e os eventos
+    // de etapa mandam os dados no snapshot (5o argumento), nao em userData.
+    // Entao um vira o outro aqui.
+    var dadosMeta = userData;
+    if (!dadosMeta && lead && (lead.whatsapp_e164 || lead.whatsapp)) {
+      dadosMeta = {
+        phone: lead.whatsapp_e164 || lead.whatsapp,
+        email: lead.email || '',
+        first_name: (lead.nome || '').split(' ')[0] || '',
+        last_name: (lead.nome || '').split(' ').slice(1).join(' ')
+      };
+    }
+    sendCapi(evento, eid, payload, dadosMeta);
     // Coleta propria + GA4 pelo servidor
     sendLpTrack(evento, payload, eid, lead);
 
