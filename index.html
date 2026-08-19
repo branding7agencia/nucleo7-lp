@@ -30,6 +30,13 @@
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
+<!-- Handshake (DNS + TCP + TLS) adiantado para as origens que o tracking.js
+     vai chamar assim que a pagina carregar. No 4G isso custa 200-300ms por
+     origem se so comecar na hora do pedido. -->
+<link rel="preconnect" href="https://tlhdqizuvjvqtbsflmmr.supabase.co" crossorigin>
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://connect.facebook.net">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Inter:wght@400;600;700&display=swap"
@@ -1399,6 +1406,11 @@ Transplante: 7 (1 INDICAÇÃO)
 </script>
 
 <!-- ===================== CONFIG + TRACKING ===================== -->
+<!-- Sem defer de proposito: o script inline logo abaixo le window.N7_CONFIG
+     na hora em que roda. Com defer, o config.js so executaria depois dele e
+     CFG nasceria vazio — o formulario perderia WEBHOOK_URL e PAGINA_OBRIGADO
+     sem erro nenhum no console. Os dois ja estao no fim do body, entao nao
+     atrasam a renderizacao do hero. -->
 <script src="config.js?v=2"></script>
 <script src="tracking.js?v=2"></script>
 
