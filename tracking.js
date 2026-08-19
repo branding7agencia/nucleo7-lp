@@ -262,8 +262,14 @@
   function sendLpTrack(evento, params, eventIdEvento, lead) {
     if (!CFG.LP_TRACK_ENDPOINT) return;
 
+    // ?ga_debug=1 na URL manda o evento para o DebugView do GA4.
+    //
+    // Existe porque o Tag Assistant NAO mostra evento de Measurement Protocol:
+    // ele so enxerga o que o navegador dispara. O evento das etapas sai do
+    // nosso servidor, entao a unica forma de ve-lo ao vivo e o DebugView.
     var body = {
       session_id: SID,
+      ga_debug: /[?&]ga_debug=1/.test(window.location.search),
       event_name: evento,
       event_id: eventIdEvento || '',
       ga_client_id: gaClientId(),
